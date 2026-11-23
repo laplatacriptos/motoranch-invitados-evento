@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOTO'S RANCH — Invitación Oficial</title>
+  <link rel="stylesheet" href="invite.css" />
+</head>
+<body class="intro-active">
+  <!-- VIDEO DE FONDO CONTINUO (SE ACTIVA A LOS 3 SEGUNDOS DE LA INTRO) -->
+  <div id="bgVideoLayer" class="bg-video-layer is-hidden" aria-hidden="true">
+    <video
+      id="bgLoopVideo"
+      class="bg-loop-video"
+      src="fondo-ruta-moto.mp4"
+      loop
+      muted
+      playsinline
+      preload="auto"
+    ></video>
+    <div class="bg-video-scrim"></div>
+  </div>
+
+  <!-- PANTALLA DE INICIO A PANTALLA COMPLETA: VIDEO DETENIDO EN 0.00 + BOTÓN "ABRIR LA INVITACIÓN" -->
+  <section id="introOverlay" class="intro-overlay" aria-label="Presentación de MOTO'S RANCH">
+    <video
+      id="introVideo"
+      class="intro-video"
+      src="intro-motos-ranch.mp4"
+      playsinline
+      muted
+      preload="auto"
+    ></video>
+
+    <div id="introLaunchBar" class="intro-launch-bar">
+      <button id="openInviteBtn" class="open-invite-btn" type="button">
+        Abrir la invitación
+      </button>
+    </div>
+
+    <button id="skipIntroBtn" class="skip-intro-btn is-hidden" type="button">
+      Saltar intro
+    </button>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL DE LA INVITACIÓN (APARECE TRAS 3 SEGUNDOS CON TRANSICIÓN SUAVE) -->
+  <main id="inviteMain" class="invite-main is-hidden" aria-hidden="true">
+    <div class="invite-container">
+      <!-- ENCABEZADO -->
+      <header class="hero-card">
+        <span class="tag">INVITACIÓN INTERACTIVA</span>
+        <h1>MOTO'S RANCH</h1>
+        <p class="subtitle">
+          Ruta, amigos, buena música, comidas, bebidas y <strong>sorteo exclusivo</strong> para quienes confirmen su lugar.
+        </p>
+
+        <!-- FORMULARIO DE CONFIRMACIÓN Y SORTEO (FOCO PRINCIPAL) -->
+        <section id="confirmacion-sorteo" class="form-card" aria-label="Confirmar asistencia y sorteo">
+          <div id="formWrapper" class="form-wrapper visible-state">
+            <div class="form-top-row">
+              <div>
+                <h2>PARTICIPAR DEL SORTEO</h2>
+                <p class="muted">Completá tu nombre y marcá el check para recibir tu número de sorteo.</p>
+              </div>
+              <button type="button" id="forgotNumberBtn" class="forgot-trigger-btn">
+                Olvidé mi número de sorteo
+              </button>
+            </div>
+
+            <form id="rsvpForm" novalidate>
+              <div class="input-group">
+                <label for="guestName">Tu nombre</label>
+                <input
+                  type="text"
+                  id="guestName"
+                  name="guestName"
+                  placeholder="Escribí tu nombre y apellido"
+                  required
+                />
+              </div>
+
+              <!-- Checklist sin required HTML para validar con JS según regla -->
+              <div class="check-group">
+                <label class="raffle-check-label" for="raffleOptIn">
+                  <input type="checkbox" id="raffleOptIn" name="raffleOptIn" checked />
+                  <span>Participar del sorteo</span>
+                </label>
+              </div>
+
+              <p id="formError" class="form-error" role="alert"></p>
+
+              <button type="submit" id="confirmBtn" class="confirm-btn">
+                Confirmar asistencia
+              </button>
+            </form>
+
+            <!-- PANEL PARA RECUPERAR EL NÚMERO DE SORTEO POR NOMBRE EXACTO -->
+            <div id="forgotNumberPanel" class="forgot-panel is-hidden" aria-label="Recuperar número de sorteo">
+              <label for="lookupExactName">Ingresá tu nombre tal cual como fue registrado</label>
+              <div class="forgot-controls">
+                <input
+                  type="text"
+                  id="lookupExactName"
+                  placeholder="Nombre exacto"
+                  autocomplete="off"
+                />
+                <button type="button" id="lookupAcceptBtn" class="lookup-accept-btn">
+                  Aceptar
+                </button>
+                <button type="button" id="lookupCloseBtn" class="lookup-close-btn">
+                  Cerrar
+                </button>
+              </div>
+              <p id="lookupResultText" class="lookup-result" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <!-- MENSAJE TEMPORAL SUAVE (2 SEGUNDOS) -->
+          <div id="statusMessageBox" class="status-message-box is-hidden" aria-live="polite">
+            <p id="statusMessageText" class="status-message-text"></p>
+          </div>
+        </section>
+
+        <!-- BOTONES INTERACTIVOS: FECHA, TEMPORIZADOR, GOOGLE MAPS Y SORTEO -->
+        <div class="action-buttons" role="group" aria-label="Accesos rápidos del evento">
+          <button type="button" class="info-btn" id="btnDateInfo">
+            <span class="btn-kicker">FECHA DEL EVENTO</span>
+            <strong class="btn-value" id="eventDateDisplay">Cargando fecha...</strong>
+          </button>
+
+          <button type="button" class="info-btn" id="btnCountdownInfo">
+            <span class="btn-kicker">¿CUÁNTO FALTA?</span>
+            <strong class="btn-value" id="countdownDisplay">00d 00h 00m 00s</strong>
+          </button>
+
+          <a
+            href="https://maps.app.goo.gl/yeNLuYmUBPKv1n1U6?g_st=aw"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="info-btn map-btn"
+          >
+            <span class="btn-kicker">UBICACIÓN EXACTA</span>
+            <strong class="btn-value">Abrir en Google Maps ↗</strong>
+          </a>
+
+          <a href="#confirmacion-sorteo" class="info-btn raffle-focus-btn">
+            <span class="btn-kicker">SORTEO ACTIVO</span>
+            <strong class="btn-value">Participar del sorteo ↑</strong>
+          </a>
+        </div>
+
+        <p id="quickFeedback" class="quick-feedback" aria-live="polite"></p>
+      </header>
+
+      <!-- BLOQUE PRINCIPAL DE SORTEO -->
+      <section class="raffle-spotlight" aria-label="Sorteo del evento">
+        <div class="spotlight-badge">FOCO EN EL SORTEO</div>
+        <h2>¡Confirmá tu asistencia y sumate al sorteo!</h2>
+        <p>
+          Al confirmar tu lugar y marcar participar del sorteo recibís tu número asignado para participar.
+        </p>
+      </section>
+
+      <!-- COMIDAS Y BEBIDAS -->
+      <section class="menu-grid" aria-label="Comidas y bebidas disponibles">
+        <article class="menu-card">
+          <h3>Comidas disponibles</h3>
+          <ul class="menu-list">
+            <li>Las famosas empanadas fritas de Gastón</li>
+            <li>Bondiolas</li>
+            <li>Choripanes</li>
+            <li>Papas fritas</li>
+            <li>Puesto de cosas dulces y café de Laura</li>
+          </ul>
+        </article>
+
+        <article class="menu-card">
+          <h3>Bebidas disponibles</h3>
+          <ul class="menu-list">
+            <li>Cervezas</li>
+            <li>Fernet</li>
+            <li>Gaseosas</li>
+            <li>Vinos</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- FOOTER: VIDEO DE CÓMO LLEGAR (PLAY MANUAL) + GOOGLE MAPS + WHATSAPP E INSTAGRAM -->
+      <footer class="invite-footer" aria-label="Cómo llegar y contacto">
+        <div class="footer-route-row">
+          <div class="footer-video-box">
+            <div class="footer-video-head">
+              <h3>Cómo llegar al MOTO'S RANCH</h3>
+              <p class="muted">Tocá play para ver el recorrido y dónde queda.</p>
+            </div>
+            <video
+              class="route-video-player"
+              src="como-llegar.mp4"
+              controls
+              playsinline
+              preload="metadata"
+            ></video>
+          </div>
+
+          <div class="footer-map-side">
+            <a
+              href="https://maps.app.goo.gl/yeNLuYmUBPKv1n1U6?g_st=aw"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="footer-maps-btn"
+            >
+              <span class="footer-maps-kicker">UBICACIÓN EN MAPA</span>
+              <strong class="footer-maps-title">Ver en Google Maps ↗</strong>
+              <span class="footer-maps-sub">Abrí el punto exacto para navegar con GPS</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-social-row" aria-label="Redes sociales">
+          <a
+            id="whatsappLink"
+            href="https://wa.me/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn whatsapp-btn"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.77 14.02c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.18-4.94-4.37-.15-.19-1.18-1.57-1.18-3 0-1.43.75-2.13 1.01-2.42.27-.29.59-.36.79-.36.2 0 .39.01.56.01.18 0 .42-.07.66.5.24.57.82 2 .89 2.15.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.18-.31.4-.45.54-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.05 1.13 1.01 2.09 1.32 2.39 1.47.3.15.47.12.65-.07.17-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.34.07.12.07.7-.17 1.38z" />
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+
+          <a
+            id="instagramLink"
+            href="https://instagram.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn instagram-btn"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor">
+              <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.8A3.95 3.95 0 0 0 3.8 7.75v8.5a3.95 3.95 0 0 0 3.95 3.95h8.5a3.95 3.95 0 0 0 3.95-3.95v-8.5a3.95 3.95 0 0 0-3.95-3.95h-8.5zm8.95 1.35a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4z" />
+            </svg>
+            <span>Instagram</span>
+          </a>
+        </div>
+      </footer>
+    </div>
+<!-- APARTADO PARA CONTACTAR AL DESARROLLADOR -->
+        <p class="developer-note-text">
+          ¿Te gustó esta invitación digital y querés una para algún evento? Podés
+          <a
+            href="https://wa.me/5492214948539"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="developer-wa-link"
+          >contactar al desarrollador</a>.
+        </p>
+  </main>
+
+  <script src="invite.js"></script>
+</body>
+</html>
